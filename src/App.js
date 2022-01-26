@@ -4,6 +4,8 @@ import axios from 'axios';
 import Cats from './Cats';
 import { Container, Button, Form } from 'react-bootstrap';
 
+const SERVER = process.env.REACT_APP_SERVER;
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -14,9 +16,9 @@ class App extends React.Component {
   }
 
   getCatsInfo = async () => {
-    let url = 'http://localhost:3001/cats';
+    let url = `${SERVER}/cats`;
     if (this.state.location) {
-      url = `http://localhost:3001/cats?location=${this.state.location}`
+      url = `${SERVER}/cats?location=${this.state.location}`
     }
 
     let catData = await axios.get(url)
@@ -28,7 +30,7 @@ class App extends React.Component {
   }
 
   makeCat = async (newCat) => {
-    let url = 'http://localhost:3001/cats';
+    let url = `${SERVER}/cats`;
     let catResult = await axios.post(url, newCat);
     // console.log(catResult.data);
     this.setState({
@@ -37,7 +39,7 @@ class App extends React.Component {
   }
 
   deleteCat = async (id) => {
-    let url = 'http://localhost:3001/cats';
+    let url = `${SERVER}/cats`;
     // note there is a SLASH there.  important!
     await axios.delete(`${url}/${id}`)
     const updatedCats = this.state.cats.filter(cat => cat._id !== id);
@@ -46,7 +48,7 @@ class App extends React.Component {
   }
 
   updateCat = async (catToUpdate) => {
-    let url = 'http://localhost:3001/cats';
+    let url = `${SERVER}/cats`;
     try {
       let updatedCatFromDB = await axios.put(`${url}/${catToUpdate._id}`, catToUpdate);
       let updatedCats = this.state.cats.map(existingCat => existingCat._id === updatedCatFromDB.data._id ? updatedCatFromDB.data : existingCat);
